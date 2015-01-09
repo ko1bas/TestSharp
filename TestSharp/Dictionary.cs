@@ -11,20 +11,31 @@ namespace TestSharp
     {
         private HashSet<String> set;
 
-        public Dictionary(String fileName)
+        public Dictionary(String fileName, Encoding encoding )
         {
-            set = loadFile(fileName);
+            set = loadFile(fileName, encoding);
         }
 
-        private HashSet<String> loadFile(String fileName)
+        private HashSet<String> loadFile(String fileName, Encoding encoding)
         {
             HashSet<String> tmpSet = new HashSet<String>();
-            StreamReader sr = new StreamReader(fileName,Encoding.UTF8);
-            while (!sr.EndOfStream)
+            StreamReader sr = new StreamReader(fileName, encoding);
+            try
             {
-                tmpSet.Add(sr.ReadLine().ToUpper());
+                while (!sr.EndOfStream)
+                {
+                    tmpSet.Add(sr.ReadLine().ToUpper());
+                }
             }
-            sr.Close();
+            catch (Exception exp)
+            {
+                Console.WriteLine(exp.Message);
+            }
+            finally
+            {
+                if (sr!=null)
+                    sr.Dispose();
+            }
             return tmpSet;
         }
 

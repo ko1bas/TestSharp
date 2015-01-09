@@ -7,21 +7,64 @@ using System.Collections;
 
 namespace TestSharp
 {
-    class WordParser
+    class WordParser : IDisposable
     {
-        private String fileName;
-        private String Delemiters = " :;\"(),+-=<>?!@#$%^&*~'./\\";
         private List<String> arrayWords;
+        private StreamReader sr;
+
+        public void Dispose()
+        {
+            if (sr != null)
+                sr.Dispose();
+        }
+
+        public bool EndOfStream
+        {
+            get
+            {
+                return (sr==null || sr.EndOfStream);
+            }
+        }
 
         public WordParser(String fileName, Encoding encoding)
         {
-            arrayWords = this.Parse(fileName, encoding);
+            try
+            {
+                sr = new StreamReader(fileName, encoding);
+            }
+            catch 
+            {
+                sr = null;
+            }
+            arrayWords  = new List<string>();
         }
 
-
-        public List<String> getWords()
+        public List<String> ReadLine()
         {
-            return arrayWords;
+            arrayWords.Clear();
+            if (!this.EndOfStream)
+            {
+                arrayWords.Clear();
+                String temp = sr.ReadLine();
+
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < temp.Length; i++)
+                {
+                    if (SentenceParser.Delemiters.IndexOf(temp[i]) < 0)
+                    {
+                        sb.Append(temp[i]);
+                    }
+                    else
+                    {
+                        arrayWords.Add(sb.ToString());
+                        sb.Clear();
+                        arrayWords.Add(temp[i].ToString());
+                    }
+                }
+                arrayWords.Add(Sentence.RF);
+
+            }
+            return arrayWords; 
         }
 
         private List<String> Parse(String fileName, Encoding encoding)
@@ -36,7 +79,7 @@ namespace TestSharp
                 for (int i = 0; i < temp.Length; i++)
                 {
                     StringBuilder sb = new StringBuilder();
-                    if (Delemiters.IndexOf(temp[i]) < 0)
+                    if (SentenceParser.Delemiters.IndexOf(temp[i]) < 0)
                     {
                         sb.Append(temp[i]);
                     }

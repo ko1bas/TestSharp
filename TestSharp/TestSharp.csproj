@@ -44,10 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dictionary.cs" />
+    <Compile Include="HtmlConvert.cs" />
+    <Compile Include="HtmlFileManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SentenceParser.cs" />
-    <Compile Include="Sentense.cs" />
+    <Compile Include="Sentence.cs" />
+    <Compile Include="Word.cs" />
     <Compile Include="WordParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
