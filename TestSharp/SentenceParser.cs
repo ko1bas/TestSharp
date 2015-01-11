@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace TestSharp
 {
+    /// <summary>
+    /// Разбивает поток слов на предложения. 
+    /// </summary>
     class SentenceParser : IDisposable
     {
         private static readonly String endOfSentence = ".?!";
@@ -19,6 +21,9 @@ namespace TestSharp
             this.words = new List<String>();
         }
 
+        /// <summary>
+        /// Возвращает true, если нечего больше парсить.
+        /// </summary>
         public bool EndOfStream
         {
             get
@@ -27,6 +32,9 @@ namespace TestSharp
             }
         }
 
+        /// <summary>
+        /// Освобождает ресурсы.
+        /// </summary>
         public void Dispose()
         {
             if (!wordParser.Equals(null))
@@ -35,6 +43,10 @@ namespace TestSharp
             }
         }
 
+        /// <summary>
+        /// Возвращает следующее предложение.
+        /// </summary>
+        /// <returns></returns>
         public Sentence getNextSentence()
         {
             Word tmpWord;
@@ -51,6 +63,7 @@ namespace TestSharp
                     break;
 
                 int i = 0;
+                
                 while (i < words.Count)
                 {
                     tmpWord.word = words[i];
@@ -75,6 +88,8 @@ namespace TestSharp
                     {
                         tmpWord.wordType = WordType.Delimiter;
                         sentence.append(tmpWord);
+
+                        /// эта часть нужна для случая когда предложение кончается '...' или '!?'
                         int j=i+1;
                         while (this.isEndOfSentence(words[j]))
                         {
@@ -83,6 +98,7 @@ namespace TestSharp
                             sentence.append(tmpWord);
                             j++;
                         }
+
                         words.RemoveRange(0,  j);
                         flag = true;
                         break;
@@ -90,18 +106,31 @@ namespace TestSharp
                     }
                     i++;
                 }
-                words.Clear();
+                if (!flag)
+                    words.Clear();
             }
             return sentence;
+            
         }
 
+        /// <summary>
+        /// Возвращает true, если word являетя разделителем (знак препинания) .
+        /// </summary>
+        /// <param name="word"></param>
+        /// <returns></returns>
         public bool isDelimiters(String word)
         {
             return (word.Length == 1 && Delemiters.IndexOf(word) >= 0);
         }
+
+        /// <summary>
+        /// Возвращает true, если word являетя пконцом предложения (.!?).
+        /// </summary>
+        /// <param name="word"></param>
+        /// <returns></returns>
         public bool isEndOfSentence(String word)
         {
-            return (endOfSentence.IndexOf(word) >= 0);
+            return (word.Length == 1 && endOfSentence.IndexOf(word) >= 0);
         }
     }
 }

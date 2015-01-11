@@ -1,23 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
 using System.Collections;
 
 namespace TestSharp
 {
+    /// <summary>
+    /// Разбивает строки полученные из txt-файла на слова.
+    /// </summary>
     class WordParser : IDisposable
     {
         private List<String> arrayWords;
         private StreamReader sr;
 
+        /// <summary>
+        /// освобождает ресурсы.
+        /// </summary>
         public void Dispose()
         {
             if (sr != null)
                 sr.Dispose();
         }
 
+        /// <summary>
+        /// возвращает true, когда достигнут конец файла.
+        /// </summary>
         public bool EndOfStream
         {
             get
@@ -39,6 +47,10 @@ namespace TestSharp
             arrayWords  = new List<string>();
         }
 
+        /// <summary>
+        /// Возвращает список слов из считанной строки файла.
+        /// </summary>
+        /// <returns></returns>
         public List<String> ReadLine()
         {
             arrayWords.Clear();
@@ -61,12 +73,21 @@ namespace TestSharp
                         arrayWords.Add(temp[i].ToString());
                     }
                 }
+                if (sb.Length > 0)
+                    arrayWords.Add(sb.ToString());
                 arrayWords.Add(Sentence.RF);
 
             }
             return arrayWords; 
         }
 
+        /// <summary>
+        /// Считывает слова из файла полностью.
+        /// Не используется.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
         private List<String> Parse(String fileName, Encoding encoding)
         {
             StreamReader sr = new StreamReader(fileName, encoding);
@@ -89,9 +110,9 @@ namespace TestSharp
                         list.Add(temp[i].ToString());
                     }
                 }
-                list.Add("\n");
+                list.Add(Sentence.RF);
             }
-            list.Add("\n");
+            list.Add(Sentence.RF);
             return list;
         }
     }

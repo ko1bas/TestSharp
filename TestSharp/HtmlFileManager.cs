@@ -1,19 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace TestSharp
 {
+    /// <summary>
+    /// Разбивает предложения, полученные от SentenceParser, согласно заданию для сохранения в html-файл.
+    /// Заведует генерацией имен html-файлов.
+    /// Сохраняет html-файлы.
+    /// </summary>
     class HtmlFileManager:IDisposable
     {
         private SentenceParser sentenceParser;
         private int countLinesInHtml;
         private int countHtmlFile;
-        private String directoryName;
+        private String directoryName; //мождо добавить get и set 
         private Sentence lastSentence;
         private Dictionary dict;
 
+        /// <summary>
+        /// </summary>
+        /// <param name="sentenceParser"></param>
+        /// <param name="countLinesInHtml">максимальное количество строк в html-файле.
+        ///</param>
+        /// <param name="dict"></param>
         public HtmlFileManager(SentenceParser sentenceParser, int countLinesInHtml, Dictionary dict)
         {
             this.sentenceParser = sentenceParser;
@@ -24,6 +34,9 @@ namespace TestSharp
             this.dict = dict;
         }
 
+        /// <summary>
+        /// Освобождаем ресурсы. 
+        /// </summary>
         public void Dispose()
         {
             if (this.sentenceParser != null)
@@ -32,6 +45,9 @@ namespace TestSharp
             }
         }
 
+        /// <summary>
+        /// Возвращает true, если достигнут конец считывания предложений.
+        /// </summary>
         public bool EndOfStream
         {
             get
@@ -40,13 +56,20 @@ namespace TestSharp
             }
         }
 
-
+        /// <summary>
+        /// Генерирует имя для нового html-файла.
+        /// </summary>
+        /// <returns></returns>
         private String getNextFileName()
         {
             countHtmlFile++;
             return directoryName + countHtmlFile.ToString() + ".html";
         }
 
+        /// <summary>
+        /// Сохраняет предложения, которые занимают не более countLinesInHtml строк в html-файл.
+        /// </summary>
+        /// <returns></returns>
         public bool SaveNextHtmlFile()
         {
             List<Sentence> listSentence = new List<Sentence>();

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
 
 namespace TestSharp
 {
+    /// <summary>
+    /// Конвертирует список предложений в html-файл с выделением словарных слов.
+    /// </summary>
     class HtmlConvert
     {
         private List<Sentence> listSentence;
@@ -23,6 +25,10 @@ namespace TestSharp
             this.dict = dict;
         }
 
+        /// <summary>
+        /// Сохраняет список предложений в html-файл.
+        /// </summary>
+        /// <param name="fileName"></param>
         public void Save(String fileName)
         {
             StreamWriter sw = null;
@@ -41,7 +47,7 @@ namespace TestSharp
                             sb.Append(spanBegin + word.word + spanEnd);
                         }
                         else
-                            sb.Append(sb);
+                            sb.Append(word.word);
                     }
                     sw.Write(sb.ToString());
                 }
